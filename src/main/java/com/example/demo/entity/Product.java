@@ -1,15 +1,17 @@
 package com.example.demo.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.SQLRestriction;
 
 @Entity
 @Getter
 @NoArgsConstructor
+@Table(name = "product")
+@SQLDelete(sql = "UPDATE product SET is_deleted = true WHERE id = ?")
+@SQLRestriction("is_deleted = false")
 
 public class Product {
 
@@ -20,6 +22,9 @@ public class Product {
     private Integer price;
     private Integer stock;
     private String description;
+
+    @Column(name = "is_deleted", nullable = false)
+    private boolean isDeleted = false;
 
     // 상품 등록 생성자
     public Product(String name, Integer price, Integer stock, String description) {
